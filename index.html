@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Analyzer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            padding: 10px 10px 10px 10px;
+            text-align: center;
+            margin-top: 25px;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            font-size: 25px;
+            color: green;
+            text-shadow: 1px 1px 2px #00ff00;
+        }
+
+        body {
+            background-color: #c2f0c2;
+        }
+
+        .text-button {
+            display: flex;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            justify-content: space-around;
+        }
+
+        .btn {
+            top: 3px;
+            right: 3px;
+            width: 160px;
+            height: 40px;
+            color: #ffffff;
+            font-family: 'Roboto', sans-serif;
+            font-size: 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        .btn:hover {
+            cursor: pointer;
+        }
+
+        .btn:active {
+            scale: 95%;
+        }
+
+        .input-text {
+            padding: 25px;
+            border: 2px solid #00ff00;
+            border-radius: 15px;
+            font-family: 'Gochi Hand', cursive;
+            font-size: 20px;
+            color: #fcfcfc;
+            width: 70vw;
+            height: 50vh;
+            resize: none;
+            background-color: #0d0d0d;
+            outline: none;
+        }
+
+        .output-stat {
+            display: inline-block;
+        }
+
+        .stat,
+        .attributes {
+            font-family: 'Roboto', sans-serif;
+            font-size: 40px;
+        }
+
+        .stat {
+            display: flex;
+            justify-content: center;
+        }
+
+        .first-row,
+        .second-row {
+            display: flex;
+            justify-content: space-evenly;
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="navbar">
+        <h1>LIVE COUNTER</h1>
+    </div>
+    <section class="input" style="margin-left: 15%; margin-right: 15%; margin-top: 4%; margin-bottom: 4%;">
+        <div class="input-box">
+            <textarea class="input-text" id="txt"></textarea>
+        </div>
+    </section>
+    <section class="output">
+        <div class="first-row">
+            <div class="output-stat">
+                <span class="attributes">Words</span><br><span class="stat">0</span>
+            </div>
+            <div class="output-stat">
+                <span class="attributes">Characters</span><br><span class="stat">0</span>
+            </div>
+            <div class="output-stat">
+                <span class="attributes">Uppercase</span><br><span class="stat">0</span>
+            </div>
+            <div class="output-stat">
+                <span class="attributes">Lowercase</span><br><span class="stat">0</span>
+            </div>
+        </div>
+        <div class="second-row">
+            <div class="output-stat">
+                <span class="attributes">Digits</span><br><span class="stat">0</span>
+            </div>
+            <div class="output-stat">
+                <span class="attributes">Vowels</span><br><span class="stat">0</span>
+            </div>
+            <div class="output-stat">
+                <span class="attributes">Consonants</span><br><span class="stat">0</span>
+            </div>
+            <div class="output-stat">
+                <span class="attributes">Sentences</span><br><span class="stat">0</span>
+            </div>
+            <div class="output-stat">
+                <span class="attributes">Spaces</span><br><span class="stat" id="spaces">0</span>
+            </div>
+        </div>
+        <div class="text-button">
+            <div>
+                <button class="btn" onclick="copyText()" style="background-color: #009933">Copy Text</button>
+            </div>
+            <div>
+                <button class="btn" onclick="clearText()" style="background-color: #d9534f">Clear Text</button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let txt = document.getElementById('txt');
+            txt.addEventListener('input', update);
+        });
+
+        let data =
+        {
+            words: 0,
+            characters: 0,
+            uppercase: 0,
+            lowercase: 0,
+            digits: 0,
+            vowels: 0,
+            consonents: 0,
+            sentences: 0,
+            spaces: 0
+        }
+        var input = document.getElementById('txt');
+        var upperCaseText = document.getElementById('uppercaseTxt');
+        var lowerCaseText = document.getElementById('lowercaseTxt');
+
+        function update() {
+            const output = document.getElementsByClassName('output')[0];
+
+            const findlength = (item) => (item === null ? 0 : item.length);
+
+            if (input != null) {
+                data.words = findlength(input.value.match(/[a-zA-Z]+/gi));
+                data.characters = input.value.length;
+                data.consonents = findlength(input.value.match(/[BCDFGHJKLMNPQRSTVWXYZ]/gi));
+                data.digits = findlength(input.value.match(/\d/g));
+                data.lowercase = findlength(input.value.match(/[a-z]/g));
+                data.sentences = findlength(input.value.match(/\056/gi));
+                data.uppercase = findlength(input.value.match(/[A-Z]/g));
+                data.vowels = findlength(input.value.match(/[aeiou]/gi));
+                data.spaces = findlength(input.value.match(/[" "]/gi))
+            }
+            i = 0;
+            for (item in data) {
+                output.getElementsByClassName('stat')[i].innerText = data[item];
+                i += 1;
+            }
+        }
+
+        function copyText() {
+            navigator.clipboard.writeText(input.value);
+        }
+
+        function clearText() {
+            const output = document.getElementsByClassName('output')[0];
+            input.value = '';
+            lowerCaseText.value = '';
+            upperCaseText.value = '';
+            for (item in data) {
+                data[item] = 0;
+            }
+            for (i = 0; i < 9; i++) {
+                output.getElementsByClassName('stat')[i].innerText = 0;
+            }
+        }
+
+        function convertToLowercase() {
+            lowerCaseText.value = input.value.toLowerCase();
+        }
+
+        function convertToUppercase() {
+            upperCaseText.value = input.value.toUpperCase();
+        }
+    </script>
+</body>
+
+</html>
